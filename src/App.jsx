@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import TodoList from './components/TodoList';
 import './App.css'
 
 function App() {
@@ -8,9 +9,8 @@ function App() {
   ]);
 
 const [input, setInput] = useState('');
-
 const [error, setError] = useState('');
-
+const [filter, setFilter] = useState('active');
 const addTodo = () => {
   const text = input.trim();
   if (!text) {
@@ -33,10 +33,22 @@ const toggleTodo = (id) => {
     todos.map(todo =>
       todo.id === id 
       ? { ...todo, completed: !todo.completed }
-       : todo
+      : todo
     )
   );
 };
+
+const deleteTodo = (id) => {
+  setTodos(todos.filter(todo => todo.id !== id));
+};
+const getFilteredTodos = () => {
+  if (filter === 'active') return todos.filter((todo) => !todo.completed);
+  if (filter === 'completed') return todos.filter((todo) => todo.completed);
+  return todos;
+};
+
+const filteredTodos = getFilteredTodos();
+
   return (
     <div className="app">
       <h1>ToDoアプリ</h1>
@@ -59,20 +71,27 @@ const toggleTodo = (id) => {
         {error && <p className="error-message">{error}</p>}
       </div>
 
+      <div className="filter-buttons">
+          <button
+            onClick={() => setFilter('active')}
+            className={filter === 'active' ? 'active' : ''}>
+            未完了
+          </button>
+          <button onClick={() => setFilter('completed')}
+          className={filter === 'completed' ? 'active' : ''}
+          >
+            完了
+          </button>
+          <button onClick={() => setFilter('all')}
+          className={filter === 'all' ? 'active' : ''}
+          >       
+            すべて
+          </button>
+      </div>
 
 
-
-
-
-
-
-      <ul className="todo-list">
-        {todos.map(todo => (
-          <li key={todo.id}>
-            {todo.text}
-          </li>
-        ))}
-      </ul>
+    {/* <TodoList todos={todos} onToggle={toggleTodo} onDelete={deleteTodo}/> */}
+    <TodoList todos={filteredTodos} onToggle={toggleTodo} onDelete={deleteTodo}/>
     </div>  
   );
 }
