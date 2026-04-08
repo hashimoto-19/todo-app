@@ -48,6 +48,8 @@ const getFilteredTodos = () => {
 };
 
 const filteredTodos = getFilteredTodos();
+const activeCount = todos.filter((todo) => !todo.completed).length;
+const completedCount = todos.filter((todo) => todo.completed).length;
 
   return (
     <div className="app">
@@ -75,17 +77,17 @@ const filteredTodos = getFilteredTodos();
           <button
             onClick={() => setFilter('active')}
             className={filter === 'active' ? 'active' : ''}>
-            未完了
+            未完了({activeCount})
           </button>
           <button onClick={() => setFilter('completed')}
           className={filter === 'completed' ? 'active' : ''}
           >
-            完了
+            完了({completedCount})
           </button>
           <button onClick={() => setFilter('all')}
           className={filter === 'all' ? 'active' : ''}
           >       
-            すべて
+            すべて({todos.length})
           </button>
       </div>
 
